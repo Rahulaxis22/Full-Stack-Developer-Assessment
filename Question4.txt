@@ -1,0 +1,29 @@
+4) console.log("7" > 7)
+console.log("2">"21")
+console.log("KL">"S")
+
+OutPut: false
+        false
+        false
+
+Logic And Explanation: 
+
+console.log("7" > 7):
+In JavaScript, when comparing values using the > operator, 
+if one of the operands is a string and the other is a number, 
+JavaScript will attempt to convert the string to a number. 
+In this case, "7" is converted to the number 7. 
+However, the comparison "7" > 7 results in false because the > operator performs a numerical comparison.
+ So, the output is false.
+
+console.log("2" > "21"):
+In this comparison, both operands are strings. 
+When comparing two strings using the > operator,
+JavaScript performs a lexicographic (dictionary-style) comparison based on the character's Unicode values. 
+Comparing the first characters, "2" has a lower Unicode value than "2", so the comparison evaluates to false.
+Therefore, the output is false.
+
+console.log("KL" > "S"):
+Similarly, when comparing strings "KL" and "S", JavaScript compares their Unicode values character by character. 
+In this case, the first character of "KL" ("K") has a higher Unicode value than the first character of "S" ("S"). 
+Therefore, the comparison evaluates to false, resulting in false as the output.

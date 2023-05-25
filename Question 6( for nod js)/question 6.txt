@@ -1,0 +1,96 @@
+6.   4-5 Socket emit and On function example including socket connection .
+
+
+  code: 
+      1. On the Server side:
+                 // Import required dependencies
+                const express = require('express');
+                const http = require('http');
+                const socketIO = require('socket.io');
+
+                // Create an instance of Express
+                const app = express();
+
+                // Create an HTTP server using Express app
+                const server = http.createServer(app);
+
+                // Create a Socket.IO instance by passing the HTTP server
+                const io = socketIO(server);
+
+                // Event handler for socket connection
+                io.on('connection', (socket) => {
+                console.log('A user connected');
+
+                // Emit a welcome message to the connected client
+                socket.emit('welcome', 'Welcome to the server');
+
+                // Listen for a chat message from the client
+                socket.on('chat message', (message) => {
+                    console.log('Received message:', message);
+                    
+                    // Broadcast the received message to all connected clients except the sender
+                    socket.broadcast.emit('chat message', message);
+                });
+
+                // Handle disconnection
+                socket.on('disconnect', () => {
+                    console.log('A user disconnected');
+                });
+                });
+
+                // Start the server
+                server.listen(3000, () => {
+                console.log('Server started on port 3000');
+                });
+        2) On client side (HTML file):
+              
+              <!DOCTYPE html>
+                <html>
+
+                <head>
+                <title>Socket.IO Example</title>
+                </head>
+
+                <body>
+                <input id="messageInput" type="text" placeholder="Enter a message" />
+                <button id="sendButton">Send</button>
+
+                <ul id="messages"></ul>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+                <script>
+                    // Create a Socket.IO instance
+                    const socket = io();
+
+                    // Get DOM elements
+                    const messageInput = document.getElementById('messageInput');
+                    const sendButton = document.getElementById('sendButton');
+                    const messagesList = document.getElementById('messages');
+
+                    // Listen for the 'welcome' event from the server
+                    socket.on('welcome', (message) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = message;
+                    messagesList.appendChild(listItem);
+                    });
+
+                    // Listen for the 'chat message' event from the server
+                    socket.on('chat message', (message) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = message;
+                    messagesList.appendChild(listItem);
+                    });
+
+                    // Send a chat message to the server on button click
+                    sendButton.addEventListener('click', () => {
+                    const message = messageInput.value;
+                    socket.emit('chat message', message);
+                    messageInput.value = '';
+                    });
+                </script>
+                </body>
+
+                </html>
+    
+
+                  

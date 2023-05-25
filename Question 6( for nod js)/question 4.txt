@@ -1,0 +1,35 @@
+4   Example for Aggregate Lookup property
+
+
+
+
+ Here's an example that demonstrates the usage of the $lookup aggregation pipeline stage in MongoDB:
+
+Consider two collections: orders and products.We want to retrieve all orders with their corresponding product 
+details by performing a lookup based on the productId field present in the orders collection:
+
+
+
+
+code:
+
+    // Assume you have already connected to the MongoDB database
+
+// Perform the aggregation
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: 'products',
+      localField: 'productId',
+      foreignField: '_id',
+      as: 'productDetails'
+    }
+  }
+]).toArray(function(err, result) {
+  if (err) {
+    console.log('Error occurred during aggregation:', err);
+    return;
+  }
+  
+  console.log('Aggregation result:', result);
+});

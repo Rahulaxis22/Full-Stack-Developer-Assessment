@@ -1,0 +1,52 @@
+ Example for Promise.all, resolve , reject
+ 
+
+  Here's an example that demonstrates the usage of Promise.all, resolve, and reject in JavaScript:
+
+
+
+  // Sample asynchronous functions
+            function fetchData1() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                resolve('Data 1');
+                }, 2000);
+            });
+            }
+
+            function fetchData2() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                reject(new Error('Data 2 error'));
+                }, 1500);
+            });
+            }
+
+            function fetchData3() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                resolve('Data 3');
+                }, 1000);
+            });
+            }
+
+            // Usage of Promise.all with resolve and reject
+            Promise.all([fetchData1(), fetchData2(), fetchData3()])
+            .then((results) => {
+                console.log('All promises resolved');
+                console.log('Results:', results);
+            })
+            .catch((error) => {
+                console.log('Error occurred');
+                console.error('Error:', error);
+            });
+    
+
+    When you run this code, you'll see the output:
+         
+         Error occurred
+          Error: Error: Data 2 error
+
+    Note that when using Promise.all, if any of the promises rejects, the whole chain rejects immediately,
+     even if the other promises are still pending or have resolved.
+

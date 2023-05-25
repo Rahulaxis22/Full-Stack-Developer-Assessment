@@ -1,0 +1,48 @@
+7.   Add indexing for Schema'
+     you can add indexing to your schema fields using the index option. 
+     Indexes improve the query performance by allowing the database to quickly locate and retrieve data based on the indexed fields.
+      Here's an example of how you can add indexing to schema fields:
+
+       code:
+
+        const mongoose = require('mongoose');
+
+            // Define the schema
+            const userSchema = new mongoose.Schema({
+            username: { type: String, unique: true, index: true },
+            email: { type: String, index: true },
+            age: Number,
+            });
+
+            // Create the model
+            const User = mongoose.model('User', userSchema);
+
+ 
+ 
+
+To create the indexes in the database, you need to call the ensureIndexes method on the model:
+   
+   code:
+       
+       User.ensureIndexes(function (err) {
+        if (err) {
+            console.log('Error creating indexes:', err);
+        } else {
+            console.log('Indexes created successfully');
+        }
+        });
+
+
+you can also use the createIndex method directly on the model to create indexes:
+  
+  code:
+     
+     User.createIndexes(function (err) {
+        if (err) {
+            console.log('Error creating indexes:', err);
+        } else {
+            console.log('Indexes created successfully');
+        }
+        });
+
+

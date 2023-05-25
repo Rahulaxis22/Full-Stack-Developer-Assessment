@@ -1,0 +1,27 @@
+5   Example for populate on a array field (where show ref id in a array)
+ code:
+    const mongoose = require('mongoose');
+
+    // Define the Product schema
+    const productSchema = new mongoose.Schema({
+    name: String,
+    price: Number
+    });
+
+    // Create the Product model
+    const Product = mongoose.model('Product', productSchema);
+
+    // Define the Order schema
+    const orderSchema = new mongoose.Schema({
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
+    customer: String
+    });
+
+    // Create the Order model
+    const Order = mongoose.model('Order', orderSchema);
+// In this example, the Order schema has an array field called products,
+   which references the Product model using the ref option and the ObjectId type.
+

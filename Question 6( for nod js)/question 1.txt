@@ -1,0 +1,112 @@
+1. use Passport.js for User creation and authentication.
+
+To use Passport.js for user creation and authentication, 
+you'll need to follow these general steps:
+ a) Install the necessary dependencies:
+        npm install passport passport-local express-session bcrypt
+ 
+ b) Set up the required modules and initialize Passport.js in your application:
+        const express = require('express');
+        const session = require('express-session');
+        const passport = require('passport');
+        const LocalStrategy = require('passport-local').Strategy;
+
+        const app = express();
+        app.use(express.urlencoded({ extended: true }));
+        app.use(express.json());
+        app.use(session({
+        secret: 'your-secret-key',
+        resave: false,
+        saveUninitialized: false
+        }));
+        app.use(passport.initialize());
+        app.use(passport.session());
+
+
+c)  Configure Passport.js with a Local Strategy for user authentication:
+        
+        const bcrypt = require('bcrypt');
+
+        const users = [
+        { id: '1', username: 'user1', password: 'password1' },
+        { id: '2', username: 'user2', password: 'password2' }
+        ];
+
+        passport.use(new LocalStrategy((username, password, done) => {
+        const user = users.find(user => user.username === username);
+        if (!user) {
+            return done(null, false, { message: 'Incorrect username' });
+        }
+
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+            return done(err);
+            }
+            if (!result) {
+            return done(null, false, { message: 'Incorrect password' });
+            }
+            return done(null, user);
+        });
+        }));
+
+        passport.serializeUser((user, done) => {
+        done(null, user.id);
+        });
+
+        passport.deserializeUser((id, done) => {
+        const user = users.find(user => user.id === id);
+        done(null, user);
+        });
+
+d) Create routes for user registration, login, and protected routes:
+            app.post('/register', (req, res) => {
+            const { username, password } = req.body;
+
+            const existingUser = users.find(user => user.username === username);
+            if (existingUser) {
+                return res.status(400).send('Username already exists');
+            }
+
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                return res.status(500).send('Error hashing password');
+                }
+
+                const newUser = { id: Date.now().toString(), username, password: hashedPassword };
+                users.push(newUser);
+
+                req.login(newUser, err => {
+                if (err) {
+                    return res.status(500).send('Error logging in after registration');
+                }
+                return res.redirect('/profile');
+                });
+            });
+            });
+
+            app.post('/login', passport.authenticate('local', {
+            successRedirect: '/profile',
+            failureRedirect: '/login',
+            failureFlash: true
+            }));
+
+            app.get('/profile', (req, res) => {
+            if (req.isAuthenticated()) {
+                return res.send('Welcome to your profile!');
+            }
+            res.redirect('/login');
+            });
+
+            app.get('/logout', (req, res) => {
+            req.logout();
+            res.redirect('/');
+            });
+ 
+ e) Start the server:
+       app.listen(3000, () => {
+       console.log('Server started on port 3000');
+        });
+    
+These are just the basic steps to demonstrate the usage of Passport.
+js for user creation and authentication.
+

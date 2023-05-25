@@ -1,0 +1,9 @@
+5) function average(a, b) {
+return a + b / 2;
+}
+console.log(average(2, 1));
+
+output: 1.5
+
+logic: the addition operation (a + b) is grouped inside parentheses (), ensuring that it is evaluated first. 
+       Then, the division operation is performed to calculate the average.
