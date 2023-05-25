@@ -1,0 +1,11 @@
+3) let obj1 = { "greeting": "hello" };
+let obj2 = obj1;
+obj1["greeting"] = "Bye";
+console.log(obj1);
+console.log(obj2);
+ 
+OutPut: { greeting: 'Bye' }
+         { greeting: 'Bye' }
+logic: In this code, obj1 is assigned the value of the object { "greeting": "hello" }. 
+      Then, obj2 is assigned the reference to obj1, meaning both variables refer to the same object in memory.
+      When the line obj1["greeting"] = "Bye"; is executed, it modifies the value of the property "greeting" within the shared object. Since obj1 and obj2 refer to the same object, both variables reflect the updated value.
